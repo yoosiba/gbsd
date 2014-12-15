@@ -23,17 +23,13 @@
  */
 package com.github.yoosiba.gbsd;
 
+import com.github.yoosiba.gbsd.billing.BillingModule;
 import com.github.yoosiba.gbsd.billing.BillingService;
 import com.github.yoosiba.gbsd.billing.CreditCard;
-import com.github.yoosiba.gbsd.billing.CreditCardProcessor;
-import com.github.yoosiba.gbsd.billing.DatabaseTransactionLog;
-import com.github.yoosiba.gbsd.billing.PaypalCreditCardProcessor;
 import com.github.yoosiba.gbsd.billing.PizzaOrder;
-import com.github.yoosiba.gbsd.billing.RealBillingService;
 import com.github.yoosiba.gbsd.billing.Receipt;
-import com.github.yoosiba.gbsd.billing.TransactionLog;
-
-
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  *
@@ -42,9 +38,12 @@ import com.github.yoosiba.gbsd.billing.TransactionLog;
 public class App {
 
     public static void main(String[] args) {
-        CreditCardProcessor processor = new PaypalCreditCardProcessor();
-        TransactionLog transactionLog = new DatabaseTransactionLog();
-        BillingService billingService = new RealBillingService(processor, transactionLog);
+//        CreditCardProcessor processor = new PaypalCreditCardProcessor();
+//        TransactionLog transactionLog = new DatabaseTransactionLog();
+//        BillingService billingService = new RealBillingService(processor, transactionLog);
+
+        Injector injector = Guice.createInjector(new BillingModule());
+        BillingService billingService = injector.getInstance(BillingService.class);
 
         PizzaOrder order = new PizzaOrder(100);
         CreditCard creditCard = new CreditCard("1234", 11, 2010);
@@ -53,8 +52,8 @@ public class App {
 
         System.out.println("receipt.hasSuccessfulCharge : " + receipt.hasSuccessfulCharge());
         System.out.println("receipt.getAmountOfCharge : " + receipt.getAmountOfCharge());
-        System.out.println("processor.getCardOfOnlyCharge : " + processor.getCardOfOnlyCharge());
-        System.out.println("processor.getAmountOfOnlyCharge : " + processor.getAmountOfOnlyCharge());
-        System.out.println("transactionLog.wasSuccessLogged : " + transactionLog.wasSuccessLogged());
+//        System.out.println("processor.getCardOfOnlyCharge : " + processor.getCardOfOnlyCharge());
+//        System.out.println("processor.getAmountOfOnlyCharge : " + processor.getAmountOfOnlyCharge());
+//        System.out.println("transactionLog.wasSuccessLogged : " + transactionLog.wasSuccessLogged());
     }
 }

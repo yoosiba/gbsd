@@ -23,6 +23,8 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
+import com.google.inject.Inject;
+
 /**
  *
  * @author Jakub Siberski
@@ -32,6 +34,7 @@ public class RealBillingService implements BillingService {
     private final CreditCardProcessor processor;
     private final TransactionLog transactionLog;
 
+    @Inject
     public RealBillingService(CreditCardProcessor processor,
             TransactionLog transactionLog) {
         this.processor = processor;
