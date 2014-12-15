@@ -23,31 +23,34 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
-import com.github.yoosiba.gbsd.billing.TransactionLog;
-import com.github.yoosiba.gbsd.billing.ChargeResult;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
+ * Test a.k.a. <i>fast</i> implementation of {@link TransactionLog}
  *
  * @author Jakub Siberski
  */
 class InMemoryTransactionLog implements TransactionLog {
 
-    private boolean noExceptions = true;
+    private HashMap<UUID, ChargeResult> charges = new HashMap<>();
+    private HashMap<UUID, RuntimeException> exceptions = new HashMap<>();
 
     @Override
-    public void logChargeResult(ChargeResult result) {
-        System.out.println(result);
+    public void logChargeResult(UUID transactionID, ChargeResult result) {
+        charges.put(transactionID, result);
+        System.out.println(this.getClass().getName() + " saved charge " + result);
     }
 
     @Override
-    public void logConnectException(RuntimeException e) {
-        noExceptions = false;
-        System.err.println(e);
+    public void logConnectException(UUID transactionID, RuntimeException e) {
+        exceptions.put(transactionID, e);
+        System.out.println(this.getClass().getName() + " saved exception " + e);
     }
 
     @Override
-    public boolean wasSuccessLogged() {
-        return this.noExceptions;
+    public boolean wasSuccessLogged(UUID transactionID) {
+        return this.charges.containsKey(transactionID) && this.exceptions.containsKey(transactionID) == false;
     }
 
 }

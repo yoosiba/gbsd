@@ -23,16 +23,18 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
+import java.util.UUID;
+
 /**
  *
  * @author Jakub Siberski
  */
 public interface TransactionLog {
 
-    public void logChargeResult(ChargeResult result);
+    public void logChargeResult(UUID transactionID, ChargeResult result);
 
-    public void logConnectException(RuntimeException e);
+    public void logConnectException(UUID transactionID, RuntimeException e);
 
-    public boolean wasSuccessLogged();
+    public boolean wasSuccessLogged(UUID transactionID);
 
 }

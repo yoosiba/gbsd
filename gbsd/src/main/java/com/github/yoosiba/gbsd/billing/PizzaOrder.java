@@ -23,12 +23,16 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
+import java.util.UUID;
+
 /**
  *
  * @author Jakub Siberski
  */
 public class PizzaOrder {
-
+    
+    private final UUID id = UUID.randomUUID();
+    
     private int amount = 0;
 
     public PizzaOrder(int amount) {
@@ -39,4 +43,9 @@ public class PizzaOrder {
         return this.amount;
     }
 
+    public UUID getId() {
+        return id;
+    }
+
+    
 }

@@ -23,10 +23,6 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
-import com.github.yoosiba.gbsd.billing.PizzaOrder;
-import com.github.yoosiba.gbsd.billing.Receipt;
-import com.github.yoosiba.gbsd.billing.RealBillingService;
-import com.github.yoosiba.gbsd.billing.CreditCard;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
@@ -73,11 +69,12 @@ public class RealBillingServiceTest {
         RealBillingService billingService = new RealBillingService(processor, transactionLog);
         Receipt receipt = billingService.chargeOrder(order, creditCard);
 
+        
         assertTrue(receipt.hasSuccessfulCharge());
         assertEquals(100, receipt.getAmountOfCharge());
         assertEquals(creditCard, processor.getCardOfOnlyCharge());
         assertEquals(100, processor.getAmountOfOnlyCharge());
-        assertTrue(transactionLog.wasSuccessLogged());
+        assertTrue(transactionLog.wasSuccessLogged(order.getId()));
     }
 
 }

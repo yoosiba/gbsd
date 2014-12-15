@@ -23,28 +23,49 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
+ * Production a.k.a. <i>slow</i> implementation of {@link TransactionLog}
  *
  * @author Jakub Siberski
  */
 public class DatabaseTransactionLog implements TransactionLog {
 
+    private HashMap<UUID, ChargeResult> charges = new HashMap<>();
+    private HashMap<UUID, RuntimeException> exceptions = new HashMap<>();
+
     public DatabaseTransactionLog() {
     }
 
     @Override
-    public void logChargeResult(ChargeResult result) {
-        System.out.println(result);
+    public void logChargeResult(UUID transactionID, ChargeResult result) {
+        this.pause();
+        charges.put(transactionID, result);
+        System.out.println(this.getClass().getName() + " saved charge " + result);
     }
 
     @Override
-    public void logConnectException(RuntimeException e) {
-        System.err.println(e);
+    public void logConnectException(UUID transactionID, RuntimeException e) {
+        this.pause();
+        exceptions.put(transactionID, e);
+        System.out.println(this.getClass().getName() + " saved exception " + e);
     }
 
     @Override
-    public boolean wasSuccessLogged() {
-        return false;
+    public boolean wasSuccessLogged(UUID transactionID) {
+        this.pause();
+        return this.charges.containsKey(transactionID) && this.exceptions.containsKey(transactionID) == false;
     }
 
+    private void pause() {
+        try {
+            java.lang.Thread.sleep(5000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger("global").log(Level.SEVERE, null, ex);
+        }
+    }
 }
