@@ -25,41 +25,45 @@ package com.github.yoosiba.gbsd;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author Jakub Siberski
  */
 public class RealBillingServiceTest {
-    
-  private final PizzaOrder order = new PizzaOrder(100);
-  private final CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-  private final InMemoryTransactionLog transactionLog = new InMemoryTransactionLog();
-  private final FakeCreditCardProcessor processor = new FakeCreditCardProcessor();
+    private final PizzaOrder order = new PizzaOrder(100);
+    private final CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-    
+    private final InMemoryTransactionLog transactionLog = new InMemoryTransactionLog();
+    private final FakeCreditCardProcessor processor = new FakeCreditCardProcessor();
+
     public RealBillingServiceTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
+        TransactionLogFactory.setInstance(transactionLog);
+        CreditCardProcessorFactory.setInstance(processor);
     }
-    
+
     @After
     public void tearDown() {
+        TransactionLogFactory.setInstance(null);
+        CreditCardProcessorFactory.setInstance(null);
     }
 
     /**
@@ -67,14 +71,14 @@ public class RealBillingServiceTest {
      */
     @Test
     public void testChargeOrder() {
-       RealBillingService billingService = new RealBillingService();
-    Receipt receipt = billingService.chargeOrder(order, creditCard);
+        RealBillingService billingService = new RealBillingService();
+        Receipt receipt = billingService.chargeOrder(order, creditCard);
 
-    assertTrue(receipt.hasSuccessfulCharge());
-    assertEquals(100, receipt.getAmountOfCharge());
-    assertEquals(creditCard, processor.getCardOfOnlyCharge());
-    assertEquals(100, processor.getAmountOfOnlyCharge());
-    assertTrue(transactionLog.wasSuccessLogged());
+        assertTrue(receipt.hasSuccessfulCharge());
+        assertEquals(100, receipt.getAmountOfCharge());
+        assertEquals(creditCard, processor.getCardOfOnlyCharge());
+        assertEquals(100, processor.getAmountOfOnlyCharge());
+        assertTrue(transactionLog.wasSuccessLogged());
     }
-    
+
 }

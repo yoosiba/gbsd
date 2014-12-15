@@ -29,12 +29,24 @@ package com.github.yoosiba.gbsd;
  */
 class ChargeResult {
 
+    private boolean success = false;
+    private String declineMessage = "";
+
+    public ChargeResult() {
+        success = true;
+    }
+
+    public ChargeResult(String declineReason) {
+        this.declineMessage = declineReason;
+        this.success = false;
+    }
+
     boolean wasSuccessful() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.success;
     }
-    
-    public String getDeclineMessage(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.        
+
+    public String getDeclineMessage() {
+        return this.declineMessage;
     }
-    
+
 }

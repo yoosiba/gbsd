@@ -27,19 +27,24 @@ package com.github.yoosiba.gbsd;
  *
  * @author Jakub Siberski
  */
-class DatabaseTransactionLog implements TransactionLog{
+class DatabaseTransactionLog implements TransactionLog {
 
     public DatabaseTransactionLog() {
     }
 
     @Override
     public void logChargeResult(ChargeResult result) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println(result);
     }
 
     @Override
     public void logConnectException(RuntimeException e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.err.println(e);
     }
-    
+
+    @Override
+    public boolean wasSuccessLogged() {
+        return false;
+    }
+
 }

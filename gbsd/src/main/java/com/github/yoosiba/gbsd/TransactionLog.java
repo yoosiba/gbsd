@@ -32,5 +32,7 @@ interface TransactionLog {
     public void logChargeResult(ChargeResult result);
 
     public void logConnectException(RuntimeException e);
-    
+
+    public boolean wasSuccessLogged();
+
 }

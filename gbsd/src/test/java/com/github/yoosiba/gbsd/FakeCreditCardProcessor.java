@@ -27,14 +27,27 @@ package com.github.yoosiba.gbsd;
  *
  * @author Jakub Siberski
  */
-class FakeCreditCardProcessor {
+class FakeCreditCardProcessor implements CreditCardProcessor {
 
-    Object getCardOfOnlyCharge() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private CreditCard card = null;
+    private int charge = Integer.MIN_VALUE;
+
+    @Override
+    public ChargeResult charge(CreditCard creditCard, int amount) {
+        //always pass
+        this.card = creditCard;
+        this.charge = amount;
+        return new ChargeResult();
     }
 
-    Object getAmountOfOnlyCharge() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    @Override
+    public CreditCard getCardOfOnlyCharge() {
+        return this.card;
     }
-    
+
+    @Override
+    public int getAmountOfOnlyCharge() {
+        return this.charge;
+    }
+
 }

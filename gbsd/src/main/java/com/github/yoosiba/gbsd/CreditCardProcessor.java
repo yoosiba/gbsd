@@ -30,5 +30,9 @@ package com.github.yoosiba.gbsd;
 interface CreditCardProcessor {
 
     public ChargeResult charge(CreditCard creditCard, int amount);
-    
+
+    CreditCard getCardOfOnlyCharge();
+
+    int getAmountOfOnlyCharge();
+
 }

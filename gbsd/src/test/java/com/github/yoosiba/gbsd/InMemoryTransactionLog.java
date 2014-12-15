@@ -27,10 +27,24 @@ package com.github.yoosiba.gbsd;
  *
  * @author Jakub Siberski
  */
-class InMemoryTransactionLog {
+class InMemoryTransactionLog implements TransactionLog {
 
-    boolean wasSuccessLogged() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private boolean noExceptions = true;
+
+    @Override
+    public void logChargeResult(ChargeResult result) {
+        System.out.println(result);
     }
-    
+
+    @Override
+    public void logConnectException(RuntimeException e) {
+        noExceptions = false;
+        System.err.println(e);
+    }
+
+    @Override
+    public boolean wasSuccessLogged() {
+        return this.noExceptions;
+    }
+
 }

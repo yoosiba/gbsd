@@ -29,12 +29,14 @@ package com.github.yoosiba.gbsd;
  */
 class PizzaOrder {
 
-    PizzaOrder(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private int amount = 0;
+
+    PizzaOrder(int amount) {
+        this.amount = amount;
     }
- 
-        public int getAmount() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public int getAmount() {
+        return this.amount;
     }
-    
+
 }

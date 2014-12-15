@@ -27,23 +27,24 @@ package com.github.yoosiba.gbsd;
  *
  * @author Jakub Siberski
  */
-public class RealBillingService implements BillingService {
+class SquareCreditCardProcessor implements CreditCardProcessor {
 
-    public Receipt chargeOrder(PizzaOrder order, CreditCard creditCard) {
-        CreditCardProcessor processor = CreditCardProcessorFactory.getInstance();
-        TransactionLog transactionLog = TransactionLogFactory.getInstance();
-
-        try {
-            ChargeResult result = processor.charge(creditCard, order.getAmount());
-            transactionLog.logChargeResult(result);
-
-            return result.wasSuccessful()
-                    ? Receipt.forSuccessfulCharge(order.getAmount())
-                    : Receipt.forDeclinedCharge(result.getDeclineMessage());
-        } catch (RuntimeException e) {
-
-            transactionLog.logConnectException(e);
-            return Receipt.forSystemFailure(e.getMessage());
-        }
+    public SquareCreditCardProcessor() {
     }
+
+    @Override
+    public ChargeResult charge(CreditCard creditCard, int amount) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public CreditCard getCardOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getAmountOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

@@ -36,5 +36,15 @@ class PaypalCreditCardProcessor implements CreditCardProcessor {
     public ChargeResult charge(CreditCard creditCard, int amount) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    @Override
+    public CreditCard getCardOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getAmountOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

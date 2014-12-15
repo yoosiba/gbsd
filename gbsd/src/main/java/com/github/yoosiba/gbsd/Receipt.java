@@ -29,24 +29,36 @@ package com.github.yoosiba.gbsd;
  */
 class Receipt {
 
+    private int chargeAmount = Integer.MIN_VALUE;
+
+    public Receipt() {
+    }
+
+    public Receipt(int chargeAmount) {
+        this.chargeAmount = chargeAmount;
+    }
+
     static Receipt forSystemFailure(String message) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.err.println(message);
+        return new Receipt();
     }
 
     static Receipt forSuccessfulCharge(int amount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("SuccessfulCharge : " + amount);
+        return new Receipt(amount);
     }
 
     static Receipt forDeclinedCharge(String declineMessage) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.err.println(declineMessage);
+        return new Receipt();
     }
 
     boolean hasSuccessfulCharge() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return chargeAmount >= 0;
     }
 
-    Object getAmountOfCharge() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    int getAmountOfCharge() {
+        return this.chargeAmount;
     }
-    
+
 }

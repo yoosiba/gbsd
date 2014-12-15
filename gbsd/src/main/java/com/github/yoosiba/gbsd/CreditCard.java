@@ -29,8 +29,14 @@ package com.github.yoosiba.gbsd;
  */
 class CreditCard {
 
-    CreditCard(String string, int i, int i0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private String number = null;
+    private int validMonth = 0;
+    private int validYear = 0;
+
+    CreditCard(String number, int month, int year) {
+        this.number = number;
+        this.validMonth = month;
+        this.validYear = year;
     }
-    
+
 }
