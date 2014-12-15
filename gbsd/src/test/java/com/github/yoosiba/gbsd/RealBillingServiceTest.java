@@ -40,9 +40,6 @@ public class RealBillingServiceTest {
     private final PizzaOrder order = new PizzaOrder(100);
     private final CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-    private final InMemoryTransactionLog transactionLog = new InMemoryTransactionLog();
-    private final FakeCreditCardProcessor processor = new FakeCreditCardProcessor();
-
     public RealBillingServiceTest() {
     }
 
@@ -56,14 +53,10 @@ public class RealBillingServiceTest {
 
     @Before
     public void setUp() {
-        TransactionLogFactory.setInstance(transactionLog);
-        CreditCardProcessorFactory.setInstance(processor);
     }
 
     @After
     public void tearDown() {
-        TransactionLogFactory.setInstance(null);
-        CreditCardProcessorFactory.setInstance(null);
     }
 
     /**
@@ -71,7 +64,9 @@ public class RealBillingServiceTest {
      */
     @Test
     public void testChargeOrder() {
-        RealBillingService billingService = new RealBillingService();
+        InMemoryTransactionLog transactionLog = new InMemoryTransactionLog();
+        FakeCreditCardProcessor processor = new FakeCreditCardProcessor();
+        RealBillingService billingService = new RealBillingService(processor, transactionLog);
         Receipt receipt = billingService.chargeOrder(order, creditCard);
 
         assertTrue(receipt.hasSuccessfulCharge());

@@ -29,9 +29,16 @@ package com.github.yoosiba.gbsd;
  */
 public class RealBillingService implements BillingService {
 
+    private final CreditCardProcessor processor;
+    private final TransactionLog transactionLog;
+
+    public RealBillingService(CreditCardProcessor processor,
+            TransactionLog transactionLog) {
+        this.processor = processor;
+        this.transactionLog = transactionLog;
+    }
+
     public Receipt chargeOrder(PizzaOrder order, CreditCard creditCard) {
-        CreditCardProcessor processor = CreditCardProcessorFactory.getInstance();
-        TransactionLog transactionLog = TransactionLogFactory.getInstance();
 
         try {
             ChargeResult result = processor.charge(creditCard, order.getAmount());

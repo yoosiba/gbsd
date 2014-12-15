@@ -27,29 +27,22 @@ package com.github.yoosiba.gbsd;
  *
  * @author Jakub Siberski
  */
-class PaypalCreditCardProcessor implements CreditCardProcessor {
+public class App {
 
-    public PaypalCreditCardProcessor() {
-    }
+    public static void main(String[] args) {
+        CreditCardProcessor processor = new PaypalCreditCardProcessor();
+        TransactionLog transactionLog = new DatabaseTransactionLog();
+        BillingService billingService = new RealBillingService(processor, transactionLog);
 
-    private CreditCard card = null;
-    private int charge = Integer.MIN_VALUE;
+        PizzaOrder order = new PizzaOrder(100);
+        CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-    @Override
-    public ChargeResult charge(CreditCard creditCard, int amount) {
-        //always pass
-        this.card = creditCard;
-        this.charge = amount;
-        return new ChargeResult();
-    }
+        Receipt receipt = billingService.chargeOrder(order, creditCard);
 
-    @Override
-    public CreditCard getCardOfOnlyCharge() {
-        return this.card;
-    }
-
-    @Override
-    public int getAmountOfOnlyCharge() {
-        return this.charge;
+        System.out.println("receipt.hasSuccessfulCharge : " + receipt.hasSuccessfulCharge());
+        System.out.println("receipt.getAmountOfCharge : " + receipt.getAmountOfCharge());
+        System.out.println("processor.getCardOfOnlyCharge : " + processor.getCardOfOnlyCharge());
+        System.out.println("processor.getAmountOfOnlyCharge : " + processor.getAmountOfOnlyCharge());
+        System.out.println("transactionLog.wasSuccessLogged : " + transactionLog.wasSuccessLogged());
     }
 }
