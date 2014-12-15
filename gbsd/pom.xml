@@ -24,4 +24,12 @@
     </properties>
     <name>Guice Billing Service Demo</name>
     <description>Demo implementaiton of examles used in Guice documentation https://github.com/google/guice/wiki/Motivation</description>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>
