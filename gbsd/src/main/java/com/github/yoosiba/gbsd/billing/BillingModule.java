@@ -21,18 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
+
+import com.google.inject.AbstractModule;
 
 /**
  *
  * @author Jakub Siberski
  */
-interface CreditCardProcessor {
-
-    public ChargeResult charge(CreditCard creditCard, int amount);
-
-    CreditCard getCardOfOnlyCharge();
-
-    int getAmountOfOnlyCharge();
-
+public class BillingModule extends AbstractModule {
+  @Override 
+  protected void configure() {
+    bind(TransactionLog.class).to(DatabaseTransactionLog.class);
+    bind(CreditCardProcessor.class).to(PaypalCreditCardProcessor.class);
+    bind(BillingService.class).to(RealBillingService.class);
+  }
 }

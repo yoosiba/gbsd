@@ -21,30 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class DatabaseTransactionLog implements TransactionLog {
+public interface CreditCardProcessor {
 
-    public DatabaseTransactionLog() {
-    }
+    public ChargeResult charge(CreditCard creditCard, int amount);
 
-    @Override
-    public void logChargeResult(ChargeResult result) {
-        System.out.println(result);
-    }
+    CreditCard getCardOfOnlyCharge();
 
-    @Override
-    public void logConnectException(RuntimeException e) {
-        System.err.println(e);
-    }
-
-    @Override
-    public boolean wasSuccessLogged() {
-        return false;
-    }
+    int getAmountOfOnlyCharge();
 
 }

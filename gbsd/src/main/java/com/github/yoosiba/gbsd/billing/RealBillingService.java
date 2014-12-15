@@ -21,44 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class Receipt {
+public class RealBillingService implements BillingService {
 
-    private int chargeAmount = Integer.MIN_VALUE;
+    private final CreditCardProcessor processor;
+    private final TransactionLog transactionLog;
 
-    public Receipt() {
+    public RealBillingService(CreditCardProcessor processor,
+            TransactionLog transactionLog) {
+        this.processor = processor;
+        this.transactionLog = transactionLog;
     }
 
-    public Receipt(int chargeAmount) {
-        this.chargeAmount = chargeAmount;
-    }
+    public Receipt chargeOrder(PizzaOrder order, CreditCard creditCard) {
 
-    static Receipt forSystemFailure(String message) {
-        System.err.println(message);
-        return new Receipt();
-    }
+        try {
+            ChargeResult result = processor.charge(creditCard, order.getAmount());
+            transactionLog.logChargeResult(result);
 
-    static Receipt forSuccessfulCharge(int amount) {
-        System.out.println("SuccessfulCharge : " + amount);
-        return new Receipt(amount);
-    }
+            return result.wasSuccessful()
+                    ? Receipt.forSuccessfulCharge(order.getAmount())
+                    : Receipt.forDeclinedCharge(result.getDeclineMessage());
+        } catch (RuntimeException e) {
 
-    static Receipt forDeclinedCharge(String declineMessage) {
-        System.err.println(declineMessage);
-        return new Receipt();
+            transactionLog.logConnectException(e);
+            return Receipt.forSystemFailure(e.getMessage());
+        }
     }
-
-    boolean hasSuccessfulCharge() {
-        return chargeAmount >= 0;
-    }
-
-    int getAmountOfCharge() {
-        return this.chargeAmount;
-    }
-
 }

@@ -21,18 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
+
+import com.github.yoosiba.gbsd.billing.TransactionLog;
+import com.github.yoosiba.gbsd.billing.ChargeResult;
 
 /**
  *
  * @author Jakub Siberski
  */
-interface TransactionLog {
+class InMemoryTransactionLog implements TransactionLog {
 
-    public void logChargeResult(ChargeResult result);
+    private boolean noExceptions = true;
 
-    public void logConnectException(RuntimeException e);
+    @Override
+    public void logChargeResult(ChargeResult result) {
+        System.out.println(result);
+    }
 
-    public boolean wasSuccessLogged();
+    @Override
+    public void logConnectException(RuntimeException e) {
+        noExceptions = false;
+        System.err.println(e);
+    }
+
+    @Override
+    public boolean wasSuccessLogged() {
+        return this.noExceptions;
+    }
 
 }

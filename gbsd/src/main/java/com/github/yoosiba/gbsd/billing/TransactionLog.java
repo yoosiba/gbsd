@@ -21,35 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class PaypalCreditCardProcessor implements CreditCardProcessor {
+public interface TransactionLog {
 
-    public PaypalCreditCardProcessor() {
-    }
+    public void logChargeResult(ChargeResult result);
 
-    private CreditCard card = null;
-    private int charge = Integer.MIN_VALUE;
+    public void logConnectException(RuntimeException e);
 
-    @Override
-    public ChargeResult charge(CreditCard creditCard, int amount) {
-        //always pass
-        this.card = creditCard;
-        this.charge = amount;
-        return new ChargeResult();
-    }
+    public boolean wasSuccessLogged();
 
-    @Override
-    public CreditCard getCardOfOnlyCharge() {
-        return this.card;
-    }
-
-    @Override
-    public int getAmountOfOnlyCharge() {
-        return this.charge;
-    }
 }

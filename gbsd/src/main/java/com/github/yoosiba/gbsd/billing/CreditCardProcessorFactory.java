@@ -21,36 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-public class RealBillingService implements BillingService {
+public class CreditCardProcessorFactory {
 
-    private final CreditCardProcessor processor;
-    private final TransactionLog transactionLog;
+    private static CreditCardProcessor instance;
 
-    public RealBillingService(CreditCardProcessor processor,
-            TransactionLog transactionLog) {
-        this.processor = processor;
-        this.transactionLog = transactionLog;
+    public static void setInstance(CreditCardProcessor processor) {
+        instance = processor;
     }
 
-    public Receipt chargeOrder(PizzaOrder order, CreditCard creditCard) {
-
-        try {
-            ChargeResult result = processor.charge(creditCard, order.getAmount());
-            transactionLog.logChargeResult(result);
-
-            return result.wasSuccessful()
-                    ? Receipt.forSuccessfulCharge(order.getAmount())
-                    : Receipt.forDeclinedCharge(result.getDeclineMessage());
-        } catch (RuntimeException e) {
-
-            transactionLog.logConnectException(e);
-            return Receipt.forSystemFailure(e.getMessage());
+    public static CreditCardProcessor getInstance() {
+        if (instance == null) {
+            return new SquareCreditCardProcessor();
         }
+
+        return instance;
     }
 }

@@ -21,30 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class SquareCreditCardProcessor implements CreditCardProcessor {
+public class ChargeResult {
 
-    public SquareCreditCardProcessor() {
+    private boolean success = false;
+    private String declineMessage = "";
+
+    public ChargeResult() {
+        success = true;
     }
 
-    @Override
-    public ChargeResult charge(CreditCard creditCard, int amount) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ChargeResult(String declineReason) {
+        this.declineMessage = declineReason;
+        this.success = false;
     }
 
-    @Override
-    public CreditCard getCardOfOnlyCharge() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    boolean wasSuccessful() {
+        return this.success;
     }
 
-    @Override
-    public int getAmountOfOnlyCharge() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getDeclineMessage() {
+        return this.declineMessage;
     }
 
 }

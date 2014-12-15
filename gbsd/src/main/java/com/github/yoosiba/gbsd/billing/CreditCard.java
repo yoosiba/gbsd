@@ -21,25 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-public class CreditCardProcessorFactory {
+public class CreditCard {
 
-    private static CreditCardProcessor instance;
+    private String number = null;
+    private int validMonth = 0;
+    private int validYear = 0;
 
-    public static void setInstance(CreditCardProcessor processor) {
-        instance = processor;
+    public CreditCard(String number, int month, int year) {
+        this.number = number;
+        this.validMonth = month;
+        this.validYear = year;
     }
 
-    public static CreditCardProcessor getInstance() {
-        if (instance == null) {
-            return new SquareCreditCardProcessor();
-        }
-
-        return instance;
-    }
 }

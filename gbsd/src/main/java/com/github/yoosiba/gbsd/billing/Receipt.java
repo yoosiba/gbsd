@@ -21,22 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class CreditCard {
+public class Receipt {
 
-    private String number = null;
-    private int validMonth = 0;
-    private int validYear = 0;
+    private int chargeAmount = Integer.MIN_VALUE;
 
-    CreditCard(String number, int month, int year) {
-        this.number = number;
-        this.validMonth = month;
-        this.validYear = year;
+    public Receipt() {
+    }
+
+    public Receipt(int chargeAmount) {
+        this.chargeAmount = chargeAmount;
+    }
+
+    static Receipt forSystemFailure(String message) {
+        System.err.println(message);
+        return new Receipt();
+    }
+
+    static Receipt forSuccessfulCharge(int amount) {
+        System.out.println("SuccessfulCharge : " + amount);
+        return new Receipt(amount);
+    }
+
+    static Receipt forDeclinedCharge(String declineMessage) {
+        System.err.println(declineMessage);
+        return new Receipt();
+    }
+
+    public boolean hasSuccessfulCharge() {
+        return chargeAmount >= 0;
+    }
+
+    public int getAmountOfCharge() {
+        return this.chargeAmount;
     }
 
 }

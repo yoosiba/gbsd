@@ -21,22 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
+
+import com.github.yoosiba.gbsd.billing.CreditCardProcessor;
+import com.github.yoosiba.gbsd.billing.ChargeResult;
+import com.github.yoosiba.gbsd.billing.CreditCard;
 
 /**
  *
  * @author Jakub Siberski
  */
-class PizzaOrder {
+class FakeCreditCardProcessor implements CreditCardProcessor {
 
-    private int amount = 0;
+    private CreditCard card = null;
+    private int charge = Integer.MIN_VALUE;
 
-    PizzaOrder(int amount) {
-        this.amount = amount;
+    @Override
+    public ChargeResult charge(CreditCard creditCard, int amount) {
+        //always pass
+        this.card = creditCard;
+        this.charge = amount;
+        return new ChargeResult();
     }
 
-    public int getAmount() {
-        return this.amount;
+    @Override
+    public CreditCard getCardOfOnlyCharge() {
+        return this.card;
+    }
+
+    @Override
+    public int getAmountOfOnlyCharge() {
+        return this.charge;
     }
 
 }

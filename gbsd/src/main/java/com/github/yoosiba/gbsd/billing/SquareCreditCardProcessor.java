@@ -21,30 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class InMemoryTransactionLog implements TransactionLog {
+public class SquareCreditCardProcessor implements CreditCardProcessor {
 
-    private boolean noExceptions = true;
-
-    @Override
-    public void logChargeResult(ChargeResult result) {
-        System.out.println(result);
+    public SquareCreditCardProcessor() {
     }
 
     @Override
-    public void logConnectException(RuntimeException e) {
-        noExceptions = false;
-        System.err.println(e);
+    public ChargeResult charge(CreditCard creditCard, int amount) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean wasSuccessLogged() {
-        return this.noExceptions;
+    public CreditCard getCardOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getAmountOfOnlyCharge() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

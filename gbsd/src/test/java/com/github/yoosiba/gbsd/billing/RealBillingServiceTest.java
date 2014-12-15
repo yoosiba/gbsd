@@ -21,8 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
+import com.github.yoosiba.gbsd.billing.PizzaOrder;
+import com.github.yoosiba.gbsd.billing.Receipt;
+import com.github.yoosiba.gbsd.billing.RealBillingService;
+import com.github.yoosiba.gbsd.billing.CreditCard;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;

@@ -21,32 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-class ChargeResult {
+public class PizzaOrder {
 
-    private boolean success = false;
-    private String declineMessage = "";
+    private int amount = 0;
 
-    public ChargeResult() {
-        success = true;
+    public PizzaOrder(int amount) {
+        this.amount = amount;
     }
 
-    public ChargeResult(String declineReason) {
-        this.declineMessage = declineReason;
-        this.success = false;
-    }
-
-    boolean wasSuccessful() {
-        return this.success;
-    }
-
-    public String getDeclineMessage() {
-        return this.declineMessage;
+    public int getAmount() {
+        return this.amount;
     }
 
 }

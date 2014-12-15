@@ -21,25 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd;
+package com.github.yoosiba.gbsd.billing;
 
 /**
  *
  * @author Jakub Siberski
  */
-public class TransactionLogFactory {
+public class DatabaseTransactionLog implements TransactionLog {
 
-    private static TransactionLog instance;
-
-    public static void setInstance(TransactionLog processor) {
-        instance = processor;
+    public DatabaseTransactionLog() {
     }
 
-    public static TransactionLog getInstance() {
-        if (instance == null) {
-            return new DatabaseTransactionLog();
-        }
-
-        return instance;
+    @Override
+    public void logChargeResult(ChargeResult result) {
+        System.out.println(result);
     }
+
+    @Override
+    public void logConnectException(RuntimeException e) {
+        System.err.println(e);
+    }
+
+    @Override
+    public boolean wasSuccessLogged() {
+        return false;
+    }
+
 }
