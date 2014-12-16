@@ -24,7 +24,7 @@
 package com.github.yoosiba.gbsd.billing;
 
 import com.google.inject.Inject;
-import java.util.UUID;
+import com.google.inject.Provider;
 
 /**
  *
@@ -32,29 +32,30 @@ import java.util.UUID;
  */
 public class RealBillingService implements BillingService {
 
-    private final CreditCardProcessor processor;
-    private final TransactionLog transactionLog;
+    private final Provider<CreditCardProcessor> processorProvider;
+    private final Provider<TransactionLog> transactionLogProvider;
 
     @Inject
-    public RealBillingService(CreditCardProcessor processor,
-            TransactionLog transactionLog) {
-        this.processor = processor;
-        this.transactionLog = transactionLog;
+    public RealBillingService(Provider<CreditCardProcessor> processorProvider,
+            Provider<TransactionLog> transactionLogProvider) {
+        this.processorProvider = processorProvider;
+        this.transactionLogProvider = transactionLogProvider;
     }
 
     public Receipt chargeOrder(PizzaOrder order, CreditCard creditCard) {
-        UUID id = order.getId();
+        CreditCardProcessor processor = processorProvider.get();
+        TransactionLog transactionLog = transactionLogProvider.get();
 
         try {
             ChargeResult result = processor.charge(creditCard, order.getAmount());
-            transactionLog.logChargeResult(id, result);
+            transactionLog.logChargeResult(order.getId(), result);
 
             return result.wasSuccessful()
                     ? Receipt.forSuccessfulCharge(order.getAmount())
                     : Receipt.forDeclinedCharge(result.getDeclineMessage());
         } catch (RuntimeException e) {
 
-            transactionLog.logConnectException(id, e);
+            transactionLog.logConnectException(order.getId(), e);
             return Receipt.forSystemFailure(e.getMessage());
         }
     }

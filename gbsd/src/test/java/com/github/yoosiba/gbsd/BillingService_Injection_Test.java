@@ -23,45 +23,45 @@
  */
 package com.github.yoosiba.gbsd;
 
-import com.github.yoosiba.gbsd.billing.BillingModule;
 import com.github.yoosiba.gbsd.billing.BillingService;
+import com.github.yoosiba.gbsd.billing.BillingTestModule;
 import com.github.yoosiba.gbsd.billing.CreditCard;
 import com.github.yoosiba.gbsd.billing.PizzaOrder;
 import com.github.yoosiba.gbsd.billing.Receipt;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * Fake client that is using BillingService. This should simulate some usage
- * scenarios of the service, to ensure that we keep code <i>working</i>
- * implementation, instead of just building mock system that makes tests pass.
- *
+ * Uses {@link BillingTestModule} to wire objects
  *
  * @author Jakub Siberski
  */
-public class App {
+public class BillingService_Injection_Test {
 
-    public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new BillingModule());
-        BillingService billingService = injector.getInstance(BillingService.class);
+    private final PizzaOrder order = new PizzaOrder(100);
+    private final CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-        simulateUsage(billingService);
+    @Inject
+    BillingService billingService;
+
+    @Before
+    public void setUp() {
+        Guice.createInjector(new BillingTestModule()).injectMembers(this);
     }
 
-    private static void simulateUsage(BillingService billingService) {
-        PizzaOrder order = new PizzaOrder(100);
-        CreditCard creditCard = new CreditCard("1234", 11, 2010);
-
+    /**
+     * Test of chargeOrder method, of class RealBillingService.
+     */
+    @Test
+    public void testChargeOrder() {
         Receipt receipt = billingService.chargeOrder(order, creditCard);
 
-        System.out.println("receipt.hasSuccessfulCharge : " + receipt.hasSuccessfulCharge());
-        System.out.println("receipt.getAmountOfCharge : " + receipt.getAmountOfCharge());
-
-        //since switching to guice di, don't directly controll objects creation
-        //we can't inspect them with current implementation
-        //we should add later some way of doing this (maybe some guice api?)
-//        System.out.println("processor.getCardOfOnlyCharge : " + processor.getCardOfOnlyCharge());
-//        System.out.println("processor.getAmountOfOnlyCharge : " + processor.getAmountOfOnlyCharge());
-//        System.out.println("transactionLog.wasSuccessLogged : " + transactionLog.wasSuccessLogged(order.getId()));
+        assertTrue(receipt.hasSuccessfulCharge());
+        assertEquals(100, receipt.getAmountOfCharge());
     }
+
 }

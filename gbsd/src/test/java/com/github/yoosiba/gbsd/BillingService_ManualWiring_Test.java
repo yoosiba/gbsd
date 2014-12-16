@@ -21,55 +21,69 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd.billing;
+package com.github.yoosiba.gbsd;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import com.github.yoosiba.gbsd.billing.CreditCard;
+import com.github.yoosiba.gbsd.billing.CreditCardProcessor;
+import com.github.yoosiba.gbsd.billing.FakeCreditCardProcessor;
+import com.github.yoosiba.gbsd.billing.InMemoryTransactionLog;
+import com.github.yoosiba.gbsd.billing.PizzaOrder;
+import com.github.yoosiba.gbsd.billing.RealBillingService;
+import com.github.yoosiba.gbsd.billing.Receipt;
+import com.github.yoosiba.gbsd.billing.TransactionLog;
+import com.google.inject.Provider;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
+ * Manual wiring performed. Allows to peek into internals.
  *
  * @author Jakub Siberski
  */
-public class RealBillingServiceTest {
+public class BillingService_ManualWiring_Test {
 
     private final PizzaOrder order = new PizzaOrder(100);
     private final CreditCard creditCard = new CreditCard("1234", 11, 2010);
 
-    public RealBillingServiceTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    RealBillingService billingService;
+    Provider<CreditCardProcessor> processorProvider;
+    Provider<TransactionLog> transactionLogProvider;
 
     @Before
     public void setUp() {
-    }
 
-    @After
-    public void tearDown() {
+        processorProvider = new Provider<CreditCardProcessor>() {
+            CreditCardProcessor processor = new FakeCreditCardProcessor();
+
+            @Override
+            public CreditCardProcessor get() {
+                return this.processor;
+            }
+        };
+
+        transactionLogProvider = new Provider<TransactionLog>() {
+            TransactionLog transactionLog = new InMemoryTransactionLog();
+
+            @Override
+            public TransactionLog get() {
+                return this.transactionLog;
+            }
+        };
+
+        billingService = new RealBillingService(processorProvider, transactionLogProvider);
     }
 
     /**
-     * Test of chargeOrder method, of class RealBillingService.
+     * Test of chargeOrder method, of class BillingService.
      */
     @Test
     public void testChargeOrder() {
-        InMemoryTransactionLog transactionLog = new InMemoryTransactionLog();
-        FakeCreditCardProcessor processor = new FakeCreditCardProcessor();
-        RealBillingService billingService = new RealBillingService(processor, transactionLog);
+        CreditCardProcessor processor = processorProvider.get();
+        TransactionLog transactionLog = transactionLogProvider.get();
         Receipt receipt = billingService.chargeOrder(order, creditCard);
 
-        
         assertTrue(receipt.hasSuccessfulCharge());
         assertEquals(100, receipt.getAmountOfCharge());
         assertEquals(creditCard, processor.getCardOfOnlyCharge());

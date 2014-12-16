@@ -31,11 +31,11 @@ import java.util.UUID;
  *
  * @author Jakub Siberski
  */
-class InMemoryTransactionLog implements TransactionLog {
+public class InMemoryTransactionLog implements TransactionLog {
 
     private HashMap<UUID, ChargeResult> charges = new HashMap<>();
     private HashMap<UUID, RuntimeException> exceptions = new HashMap<>();
-
+   
     @Override
     public void logChargeResult(UUID transactionID, ChargeResult result) {
         charges.put(transactionID, result);

@@ -23,31 +23,17 @@
  */
 package com.github.yoosiba.gbsd.billing;
 
+import com.google.inject.AbstractModule;
+
 /**
  *
  * @author Jakub Siberski
  */
-public class FakeCreditCardProcessor implements CreditCardProcessor {
-
-    private CreditCard card = null;
-    private int charge = Integer.MIN_VALUE;
-
-    @Override
-    public ChargeResult charge(CreditCard creditCard, int amount) {
-        //always pass
-        this.card = creditCard;
-        this.charge = amount;
-        return new ChargeResult();
-    }
-
-    @Override
-    public CreditCard getCardOfOnlyCharge() {
-        return this.card;
-    }
-
-    @Override
-    public int getAmountOfOnlyCharge() {
-        return this.charge;
-    }
-
+public class BillingTestModule extends AbstractModule {
+  @Override 
+  protected void configure() {
+    bind(TransactionLog.class).to(InMemoryTransactionLog.class);
+    bind(CreditCardProcessor.class).to(FakeCreditCardProcessor.class);
+    bind(BillingService.class).to(RealBillingService.class);
+  }
 }

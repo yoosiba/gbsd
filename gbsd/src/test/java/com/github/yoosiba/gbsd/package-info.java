@@ -21,33 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.github.yoosiba.gbsd.billing;
-
 /**
+ * Collection of tests that are actually different implementations of the same
+ * use case.
  *
- * @author Jakub Siberski
  */
-public class FakeCreditCardProcessor implements CreditCardProcessor {
-
-    private CreditCard card = null;
-    private int charge = Integer.MIN_VALUE;
-
-    @Override
-    public ChargeResult charge(CreditCard creditCard, int amount) {
-        //always pass
-        this.card = creditCard;
-        this.charge = amount;
-        return new ChargeResult();
-    }
-
-    @Override
-    public CreditCard getCardOfOnlyCharge() {
-        return this.card;
-    }
-
-    @Override
-    public int getAmountOfOnlyCharge() {
-        return this.charge;
-    }
-
-}
+package com.github.yoosiba.gbsd;

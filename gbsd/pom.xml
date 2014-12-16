@@ -36,5 +36,16 @@
             <artifactId>guice</artifactId>
             <version>4.0-beta5</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-testlib</artifactId>
+            <version>4.0-beta5</version>
+        </dependency>
+        <dependency>
+	<groupId>org.easymock</groupId>
+	<artifactId>easymock</artifactId>
+	<version>3.3</version>
+</dependency>
+
     </dependencies>
 </project>
